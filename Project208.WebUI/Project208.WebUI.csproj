@@ -30,4 +30,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Project208.Services\Project208.Services.csproj" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if not exist “$(WebProjectOutputDir)\bin\Roslyn” md “$(WebProjectOutputDir)\bin\Roslyn”&#xD;&#xA;start /MIN xcopy /s /y /R “$(OutDir)roslyn\*.*” “$(WebProjectOutputDir)\bin\Roslyn”" />
+  </Target>
 </Project>
