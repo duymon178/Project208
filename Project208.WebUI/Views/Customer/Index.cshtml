@@ -1,0 +1,116 @@
+﻿@{
+    ViewData["Title"] = "Quản Lý Khách Hàng";
+}
+
+@section Scripts {
+    <script asp-src-include="/lib/site/js/pages/customer-page/customer-page-model.js"></script>
+    <script asp-src-include="/lib/site/js/pages/customer-page/customer-page-controller.js"></script>
+}
+
+@section Body {
+@Html.Partial("_CreateCustomer", new CreateCustomerViewModel())
+@Html.Partial("_CustomerDetail", new CustomerDetailViewModel())
+
+<div id="customer-summary" class="panel panel-default">
+    <div class="panel-heading">Danh Sách Khách Hàng</div>
+    <div class="panel-body">
+        <p class="visible-print-block">
+            Khu Vực:
+            <span data-bind="visible: customerPageModel.filterData.locationId() == LocationEnum.HN">Hà Nội</span>
+            <span data-bind="visible: customerPageModel.filterData.locationId() == LocationEnum.HN">Sài Gòn</span>
+        </p>
+
+        <form id="index-filter" class="form-inline hidden-print">
+            <div class="form-group index-type-button-group">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary active" data-bind="click: clearCustomerList">
+                        <input type="radio" data-bind="bsChecked: customerPageModel.filterData.locationId, checkedValue: LocationEnum.HN"
+                               name="optionsLocation" id="options1" autocomplete="off">Hà Nội
+                    </label>
+                    <label class="btn btn-primary" data-bind="click: clearCustomerList">
+                        <input type="radio" data-bind="bsChecked: customerPageModel.filterData.locationId, checkedValue: LocationEnum.SG"
+                               name="optionsLocation" id="options2" autocomplete="off">Sài Gòn
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="searchInput">Tên khách hàng</label>
+                <div class="input-group">
+                    <input type="text" data-bind="value: customerPageModel.filterData.searchString" id="searchInput" class="form-control" placeholder="Tên khách.." />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" data-bind="click: getSearchStringBasedCustomers" type="button">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true" aria-label="Tìm kiếm"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <button class="btn btn-default printBtn" type="button" aria-label="Print">
+                <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+            </button>
+        </form>
+        <div class="row text-center" data-bind="visible: customerPageModel.customerList().length == 0">
+            <div class="col-sm-12">
+                <span>Chưa có dữ liệu.</span>
+            </div>
+        </div>
+        <div class="table-responsive my-index-table">
+            <table class="table table-striped table-condensed table-bordered table-hover" data-bind="visible: customerPageModel.customerList().length > 0">
+                <thead>
+                    <tr>
+                        <th>Mã KH</th>
+                        <th>Tên</th>
+                        <th>Địa chỉ</th>
+                        <th>SĐT</th>
+                        <th>Ghi Chú</th>
+                        <th class="hidden-print"></th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: { data: customerPageModel.customerList, afterAdd: show }">
+                    <tr>
+                        <td data-bind="text: customerId"></td>
+                        <td data-bind="text: customerName"></td>
+                        <td data-bind="text: customerAddress"></td>
+                        <td data-bind="text: customerPhoneNumber"></td>
+                        <td data-bind="text: customerNote"></td>
+                        <td class="text-center hidden-print">
+                            <button class="btn btn-xs btn-info" data-toggle="modal" data-target="#customer-detail-modal"
+                                    data-bind="click: getCustomerDetail.bind($data, customerId(), customerName(), customerAddress(), locationId(), customerPhoneNumber(), customerNote())">
+                                <span class="glyphicon glyphicon-arrow-right"></span> Chi Tiết
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="customer-info" class="panel panel-default customa hidden-print">
+    <div class="panel-heading">Tổng Số Khách Hàng</div>
+    <div class="panel-body info-body">
+        <div class="row" data-bind="foreach: { data: customerPageModel.customerTotalCount }">
+            <div class="col-xs-12 col-sm-2">
+                <table class="index-table">
+                    <tr>
+                        <td class="index-heading"><span data-bind="text: location.locationName"></span>:</td>
+                        <td>
+                            <a href="#" data-bind="click: getAllCustomers.bind($data, location.locationId())">
+                                <span data-bind="text: customersCount, css: setContractStatus(customersCount(), ContractStatusEnum.Paying)"></span>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <form class="form-inline" id="index-create-buttons">
+            <div class="form-group">
+                <button type="button" class="btn btn-primary index-buttons" id="btn-add-customer" data-toggle="modal" data-target="#create-customer-modal">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Thêm Khách
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+}
+

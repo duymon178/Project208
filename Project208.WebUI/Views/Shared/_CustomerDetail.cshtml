@@ -1,0 +1,167 @@
+﻿@model CustomerDetailViewModel
+
+<div class="modal fade hidden-print" id="customer-detail-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="cusDetail-myModalLabel">Chi Tiết Khách Hàng</h4>
+            </div>
+
+            <form novalidate data-bind="submit: saveCustomerDetail" id="customerDetailForm">
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="CustomerName" class="control-label">* Tên:</label>
+                            <input asp-for="CustomerName" data-bind="value: customerModel.tempCustomer.CustomerName" type="text" class="form-control" placeholder="Tên khách.." />
+                            <span asp-validation-for="CustomerName" class="help-block"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="CustomerId" class="control-label">Mã KH:</label>
+                            <input asp-for="CustomerId" data-bind="value: customerModel.tempCustomer.CustomerId" type="text" class="form-control" placeholder="Mã khách hàng.." readonly />
+                            <span asp-validation-for="CustomerId" class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="CustomerAddress" class="control-label">* Địa Chỉ:</label>
+                            <input asp-for="CustomerAddress" data-bind="value: customerModel.tempCustomer.CustomerAddress" type="text" class="form-control" placeholder="Địa chỉ.." />
+                            <span asp-validation-for="CustomerAddress" class="help-block"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="CustomerPhoneNumber" class="control-label">Số Điện Thoại:</label>
+                            <input asp-for="CustomerPhoneNumber" data-bind="value: customerModel.tempCustomer.CustomerPhoneNumber" type="text" class="form-control" placeholder="SĐT.." />
+                            <span asp-validation-for="CustomerPhoneNumber" class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="LocationId">Khu Vực:</label>
+                            <div class="display-block">
+                                <label class="radio-inline">
+                                    <input asp-for="LocationId" type="radio" value="LocationEnum.HN" data-bind="checked: customerModel.tempCustomer.LocationId, checkedValue: LocationEnum.HN" /> Hà Nội
+                                </label>
+                                <label class="radio-inline">
+                                    <input asp-for="LocationId" type="radio" value="LocationEnum.SG" data-bind="checked: customerModel.tempCustomer.LocationId, checkedValue: LocationEnum.SG" /> Sài Gòn
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="CustomerNote" class="control-label">Ghi Chú:</label>
+                            <textarea asp-for="CustomerNote" data-bind="value: customerModel.tempCustomer.CustomerNote" class="form-control" placeholder="Ghi chú.."></textarea>
+                        </div>
+                    </div>
+                    <p class="text-danger"><strong>Chú ý:</strong> Các trường có dấu * là bắt buộc.</p>
+
+                    <ul class="nav nav-tabs" role="tablist" id="customer-detail-tabs">
+                        <li role="presentation" class="active">
+                            <a href="#t1-list" aria-controls="t1-list" role="tab" data-toggle="tab">
+                                <span class="glyphicon glyphicon-list-alt"></span> Danh Sách Bát Họ (<span data-bind="text: customerModel.customerT1ContractList().length"></span>)
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#t2-list" aria-controls="t2-list" role="tab" data-toggle="tab">
+                                <span class="glyphicon glyphicon-list-alt"></span> Danh Sách Khoản Nóng (<span data-bind="text: customerModel.customerT2ContractList().length"></span>)
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="t1-list">
+                            <div class="row" data-bind="visible: customerModel.customerT1ContractList().length == 0">
+                                <div class="col-sm-12">
+                                    <span>Chưa có bát họ nào.</span>
+                                </div>
+                            </div>
+                            <div class="table-responsive my-detail-table">
+                                <table class="table table-striped table-condensed table-bordered table-hover" data-bind="visible: customerModel.customerT1ContractList().length > 0">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã BH</th>
+                                            <th>Bát</th>
+                                            <th>Lấy</th>
+                                            <th>Còn</th>
+                                            <th>Trạng Thái</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: { data: customerModel.customerT1ContractList, afterAdd: show }">
+                                        <tr>
+                                            <td data-bind="text: contractId"></td>
+                                            <td data-bind="text: contractInformation"></td>
+                                            <td data-bind="text: moment(borrowDate(), 'YYYY/MM/DD').format('DD/MM/YYYY')"></td>
+                                            <td><span data-bind="text: totalLeft"></span><span data-bind="visible: totalLeft() > 0">k</span></td>
+                                            <td data-bind="text: contractStatus, css: setBackgroundStatus(contractStatusId())"></td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#contractType1-detail-modal">
+                                                    <span class="glyphicon glyphicon-arrow-right"></span> Chi Tiết
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane" id="t2-list">
+                            <div class="row" data-bind="visible: customerModel.customerT2ContractList().length == 0">
+                                <div class="col-sm-12">
+                                    <span>Chưa có khoản nóng nào.</span>
+                                </div>
+                            </div>
+                            <div class="table-responsive my-detail-table">
+                                <table class="table table-striped table-condensed table-bordered table-hover" data-bind="visible: customerModel.customerT2ContractList().length > 0">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã KN</th>
+                                            <th>Khoản, (Giá)</th>
+                                            <th>Tiền/Ngày</th>
+                                            <th>Lấy</th>
+                                            <th>Trạng Thái</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: { data: customerModel.customerT2ContractList, afterAdd: show }">
+                                        <tr>
+                                            <td data-bind="text: contractId"></td>
+                                            <td>
+                                                <span data-bind="visible: amount() < 10">&nbsp;</span>
+                                                <span data-bind="text: amount"></span>tr, (<span data-bind="text: interestRate"></span>)
+                                            </td>
+                                            <td>
+                                                <span data-bind="visible: amountPerPeriod() < 1000">&nbsp;</span>
+                                                <span data-bind="text: periodInformation"></span>
+                                            </td>
+                                            <td data-bind="text: moment(borrowDate(), 'YYYY/MM/DD').format('DD/MM/YYYY')"></td>
+                                            <td data-bind="text: contractStatus, css: setBackgroundStatus(contractStatusId()) "></td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs btn-info" data-bind="">
+                                                    <span class="glyphicon glyphicon-arrow-right"></span> Chi Tiết
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer form-inline">
+                    <div class="form-group pull-left">
+                        <button type="button" class="btn btn-default" data-bind="click: removeCustomer"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Xóa Khách Hàng</button>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" data-bind="click: clearCustomerForm">Thoát</button>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Lưu</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

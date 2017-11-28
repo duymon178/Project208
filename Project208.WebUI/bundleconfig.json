@@ -1,0 +1,41 @@
+[
+  {
+    "outputFileName": "wwwroot/bundler/js/bundle.js",
+    "inputFiles": [
+      "wwwroot/lib/other-libs/jquery/dist/jquery.js",
+      "wwwroot/lib/other-libs/jquery-validation/dist/jquery.validate.js",
+      "wwwroot/lib/other-libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js",
+      "wwwroot/lib/other-libs/globalize/lib/globalize.js",
+      "wwwroot/lib/other-libs/knockout/dist/knockout.js",
+      "wwwroot/lib/other-libs/bootstrap/dist/js/bootstrap.js",
+      "wwwroot/lib/other-libs/underscore/underscore.js",
+      "wwwroot/lib/other-libs/moment/moment.js",
+      "wwwroot/lib/other-libs/alertify-js/build/alertify.js",
+      "wwwroot/lib/other-libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.js",
+      "wwwroot/lib/site/js/common/ajax.js",
+      "wwwroot/lib/site/js/common/helpers.js",
+      "wwwroot/lib/site/js/common/models/common-model.js",
+      "wwwroot/lib/site/js/common/models/contract-model.js",
+      "wwwroot/lib/site/js/common/models/customer-model.js",
+      "wwwroot/lib/site/js/common/models/payment-detail-model.js",
+      "wwwroot/lib/site/js/common/controllers/common-controller.js",
+      "wwwroot/lib/site/js/common/controllers/contract-controller.js",
+      "wwwroot/lib/site/js/common/controllers/customer-controller.js",
+      "wwwroot/lib/site/js/common/controllers/payment-detail-controller.js",
+      "wwwroot/lib/site/js/services/contract-service.js",
+      "wwwroot/lib/site/js/services/customer-service.js",
+      "wwwroot/lib/site/js/services/payment-detail-service.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/bundler/css/bundle.css",
+    "inputFiles": [
+      "wwwroot/lib/site/css/default.css",
+      "wwwroot/lib/other-libs/bootstrap/dist/css/bootstrap.css",
+      "wwwroot/lib/other-libs/alertify-js/build/css/alertify.css",
+      "wwwroot/lib/other-libs/alertify-js/build/css/themes/default.css",
+      "wwwroot/lib/other-libs/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css",
+      "wwwroot/lib/site/css/custom.css"
+    ]
+  }
+]

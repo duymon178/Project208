@@ -1,0 +1,55 @@
+﻿@model CreateCustomerViewModel
+
+<div class="modal fade" id="create-customer-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-focus-on="input:first">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Thêm Khách Hàng Mới</h4>
+            </div>
+
+            <form novalidate data-bind="submit: createNewCustomer" id="createCustomerForm">
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <div class="form-group">
+                        <label asp-for="CustomerName" class="control-label">* Tên Khách Hàng:</label>
+                        <input asp-for="CustomerName" data-bind="value: customerModel.newCustomer.CustomerName" type="text" class="form-control" placeholder="Nhập tên khách hàng.." />
+                        <span asp-validation-for="CustomerName" class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CustomerAddress" class="control-label">* Địa chỉ:</label>
+                        <input asp-for="CustomerAddress" data-bind="value: customerModel.newCustomer.CustomerAddress" type="text" class="form-control" placeholder="Nhập địa chỉ.." />
+                        <span asp-validation-for="CustomerAddress" class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LocationId">Khu vực:</label>
+                        <div class="display-block">
+                            <label class="radio-inline">
+                                <input asp-for="LocationId" type="radio" value="LocationEnum.HN" data-bind="checked: customerModel.newCustomer.LocationId, checkedValue: LocationEnum.HN" /> Hà Nội
+                            </label>
+                            <label class="radio-inline">
+                                <input asp-for="LocationId" type="radio" value="LocationEnum.SG" data-bind="checked: customerModel.newCustomer.LocationId, checkedValue: LocationEnum.SG" /> Sài Gòn
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CustomerPhoneNumber" class="control-label">Số Điện Thoại:</label>
+                        <input asp-for="CustomerPhoneNumber" data-bind="value: customerModel.newCustomer.CustomerPhoneNumber" type="text" class="form-control" placeholder="Nhập sđt.." />
+                        <span asp-validation-for="CustomerPhoneNumber" class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CustomerNote" class="control-label">Ghi Chú:</label>
+                        <textarea asp-for="CustomerNote" data-bind="value: customerModel.newCustomer.CustomerNote" class="form-control" placeholder="Nhập ghi chú.."></textarea>
+                    </div>
+                    <p class="text-danger"><strong>Chú ý:</strong> Các trường có dấu * là bắt buộc.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" data-bind="click: clearCustomerForm">Hủy</button>
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Thêm Mới</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

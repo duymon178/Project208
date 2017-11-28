@@ -1,0 +1,297 @@
+﻿@media screen {
+    .my-index-table {
+        overflow: auto;
+        max-height: 50vh;
+    }
+
+    .my-detail-table {
+        overflow: auto;
+        max-height: 25vh;
+    }
+}
+
+@media print {
+    /* on modal open bootstrap adds class "modal-open" to body, so we can handle that case and hide body */
+    body.modal-open {
+        visibility: hidden;
+    }
+
+        body.modal-open .modal .modal-header,
+        body.modal-open .modal .modal-body {
+            visibility: visible; /* make visible modal body and header */
+        }
+
+        body.modal-open .modal {
+            position: absolute;
+            left: 0;
+            top: 0;
+            margin: 0;
+            padding: 0;
+            overflow: visible;
+        }
+
+            body.modal-open .modal .contract-detail-info {
+                display: inline-block;
+            }
+}
+
+body {
+    padding-top: 70px;
+    background-color: #f2f2f2;
+    color: #666;
+}
+
+.modal {
+    overflow-y: auto;
+}
+
+.modal-open {
+    overflow: auto;
+    padding-right: 0px !important;
+}
+
+.btn {
+    border-radius: 2px;
+}
+
+.modal-title {
+    color: #1a4e9c;
+}
+
+.display-block {
+    display: block;
+}
+
+.form-control {
+    border-radius: 2px;
+}
+
+.index-buttons {
+    width: 126px;
+}
+
+#btn-add-customer {
+    background-color: #4596dc;
+    border-color: #388ed8;
+}
+
+    #btn-add-customer:hover {
+        background-color: #337ab7;
+        border-color: #2e6da4;
+    }
+
+.panel {
+    margin-bottom: 15px;
+    border-radius: 2px;
+}
+
+#index-create-buttons {
+    margin-top: 25px;
+}
+
+.btn-warning {
+    background-color: #f0a64e;
+}
+
+.customa a {
+    color: #666;
+}
+
+    .customa a:hover {
+        text-decoration: none;
+        color: #449d44;
+    }
+
+.table {
+    margin-bottom: 0px;
+}
+
+#index-filter .btn-primary {
+    color: #388cd4;
+    background-color: #fff;
+    border-color: #4596dc;
+    width: 77px;
+}
+
+    #index-filter .btn-primary.active {
+        color: #fff;
+        background-color: #4596dc;
+    }
+
+.index-type-button-group {
+    margin-right: 15px;
+}
+
+.index-heading {
+    font-weight: bold;
+}
+
+.index-table {
+    margin: 10px 0px;
+}
+
+.index-table th {
+    padding-bottom: 3px;
+}
+
+.index-table td {
+    padding-right: 15px;
+    padding-bottom: 8px;
+}
+
+.navbar {
+    background-color: #333
+}
+
+.navbar-inverse .navbar-brand {
+    color: #fff;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #eaeaea;
+}
+
+.panel-default > .panel-heading {
+    background-color: #fff;
+    font-size: 19px;
+    color: #1a4e9c;
+}
+
+.panel-default {
+    border-color: #fff;
+}
+
+.panel {
+    padding: 10px 20px;
+}
+
+.panel-heading {
+    padding: 10px 0px;
+}
+
+.panel-body {
+    padding: 20px 0px 10px 0px;
+}
+
+.location-padding {
+    padding-top: 10px;
+}
+
+.badge-green {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #3c763d;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #c2ecb1;
+    border-radius: 10px;
+    border-color: #d6e9c6;
+}
+
+.badge-yellow {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #8a6d3b;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #f7edb7;
+    border-radius: 10px;
+    border-color: #faebcc;
+}
+
+.badge-red {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #a94442;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #f3cccc;
+    border-radius: 10px;
+    border-color: #ebccd1;
+}
+
+#index-filter {
+    margin-bottom: 15px;
+}
+
+.nav-tabs {
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.pmDetail-section {
+    margin: 12px 0px 20px 0px;
+}
+
+.alertify-notifier .ajs-message.ajs-warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #e6d779;
+}
+
+#customer-info .index-table td {
+    padding-right: 5px;
+}
+
+.detail-section {
+    border-top: 1px solid #e5e5e5;
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+.inline-modal-title {
+    display: inline-block;
+}
+
+#contractType1DetailForm .pmDetail-section-2 {
+    padding-bottom: 0px;
+}
+
+#ct1-detail-title {
+    margin-right: 20px;
+}
+
+.custom-default-background {
+    background-color: #eee;
+}
+
+#dailyLendForm .btn-primary,
+#dailyListForm .btn-primary,
+#unpaidListForm .btn-primary {
+    color: #388cd4;
+    background-color: #fff;
+    border-color: #4596dc;
+    width: 77px;
+}
+
+    #dailyLendForm .btn-primary.active,
+    #dailyListForm .btn-primary.active,
+    #unpaidListForm .btn-primary.active {
+        color: #fff;
+        background-color: #4596dc;
+    }
+
+#ct-searchDate-input {
+    margin-right: 1px;
+}
+
+#dailyLendForm,
+#dailyListForm,
+#unpaidListForm {
+    margin-bottom: 15px;
+}

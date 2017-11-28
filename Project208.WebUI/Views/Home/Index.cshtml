@@ -1,0 +1,326 @@
+﻿@{
+    ViewData["Title"] = "Trang Chủ";
+}
+
+@section Scripts {
+    <script asp-src-include="/lib/site/js/pages/index-page/index-page-model.js"></script>
+    <script asp-src-include="/lib/site/js/pages/index-page/index-page-controller.js"></script>
+}
+
+@section Body {
+@Html.Partial("_CustomerDetail", new CustomerDetailViewModel())
+@Html.Partial("_CreateCustomer", new CreateCustomerViewModel())
+
+<div id="index-summary" class="panel panel-default">
+    <div class="panel-heading hidden-print">Thông Tin Bát Họ / Khoản Nóng</div>
+    <div class="panel-heading visible-print">
+        <span data-bind="visible: indexPageModel.filterData.isDaily">
+            <span data-bind="visible: indexPageModel.filterData.contractType() == ContractTypeEnum.Type1">Danh Sách Bát Họ</span>
+            <span data-bind="visible: indexPageModel.filterData.contractType() == ContractTypeEnum.Type2">Danh Sách Khoản Nóng</span>
+            Cần Thu - @DateTime.Now.ToString("d")
+        </span>
+        <span data-bind="visible: !indexPageModel.filterData.isDaily()">
+            <span data-bind="visible: indexPageModel.filterData.contractType() == ContractTypeEnum.Type1">Danh Sách Bát Họ</span>
+            <span data-bind="visible: indexPageModel.filterData.contractType() == ContractTypeEnum.Type2">Danh Sách Khoản Nóng</span>
+        </span>
+    </div>
+    <div class="panel-body">
+        <p class="visible-print-block">
+            Khu Vực:
+            <span data-bind="visible: indexPageModel.filterData.locationId() == LocationEnum.HN">Hà Nội</span>
+            <span data-bind="visible: indexPageModel.filterData.locationId() == LocationEnum.SG">Sài Gòn</span>
+        </p>
+        <p class="visible-print-block">
+            Trạng Thái:
+            <span data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.Paying">Đang Thu</span>
+            <span data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.SlowlyReturn">Thu Hồi</span>
+            <span data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.UnableToPay">Bễ</span>
+        </p>
+
+        <form id="index-filter" class="hidden-print">
+            <div class="form-group">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary active" data-bind="click: clearContractList">
+                        <input type="radio" data-bind="bsChecked: indexPageModel.filterData.locationId, checkedValue: LocationEnum.HN"
+                               name="optionsLocation" id="options1" autocomplete="off" />Hà Nội
+                    </label>
+                    <label class="btn btn-primary" data-bind="click: clearContractList">
+                        <input type="radio" data-bind="bsChecked: indexPageModel.filterData.locationId, checkedValue: LocationEnum.SG"
+                               name="optionsLocation" id="options2" autocomplete="off" />Sài Gòn
+                    </label>
+                </div>
+            </div>
+            <div class="form-inline">
+                <div class="form-group">
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary active" data-bind="click: clearContractList">
+                            <input type="radio" data-bind="bsChecked: indexPageModel.filterData.contractType, checkedValue: ContractTypeEnum.Type1"
+                                   name="optionsType" id="options3" autocomplete="off" />Họ
+                        </label>
+                        <label class="btn btn-primary" data-bind="click: clearContractList">
+                            <input type="radio" data-bind="bsChecked: indexPageModel.filterData.contractType, checkedValue: ContractTypeEnum.Type2"
+                                   name="optionsType" id="options4" autocomplete="off" />Khoản
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group index-type-button-group">
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary active" data-bind="click: clearContractList">
+                            <input type="radio" data-bind="bsChecked: indexPageModel.filterData.contractStatusId, checkedValue: ContractStatusEnum.Paying"
+                                   name="optionsStatus" id="options5" autocomplete="off" />Đ.Thu
+                        </label>
+                        <label class="btn btn-primary" data-bind="click: clearContractList">
+                            <input type="radio" data-bind="bsChecked: indexPageModel.filterData.contractStatusId, checkedValue: ContractStatusEnum.SlowlyReturn"
+                                   name="optionsStatus" id="options6" autocomplete="off" />T.Hồi
+                        </label>
+                        <label class="btn btn-primary" data-bind="click: clearContractList">
+                            <input type="radio" data-bind="bsChecked: indexPageModel.filterData.contractStatusId, checkedValue: ContractStatusEnum.UnableToPay"
+                                   name="optionsStatus" id="options7" autocomplete="off" />Bễ
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="searchInput">Tên khách hàng</label>
+                    <div class="input-group">
+                        <input type="text" data-bind="value: indexPageModel.filterData.searchString" id="searchInput" class="form-control" placeholder="Tên khách.." />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" data-bind="click: getSearchStringBasedContracts" type="button">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true" aria-label="Tìm kiếm"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <button class="btn btn-default printBtn" type="button" aria-label="Print">
+                    <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+
+        <div class="row text-center" data-bind="visible: indexPageModel.t1List().length == 0 && indexPageModel.t2List().length == 0">
+            <div class="col-sm-12">
+                <span>Chưa có dữ liệu.</span>
+            </div>
+        </div>
+
+        <div class="table-responsive my-index-table">
+            <table class="table table-striped table-condensed table-bordered table-hover"
+                   data-bind="visible: indexPageModel.filterData.contractType() == ContractTypeEnum.Type1 && indexPageModel.t1List().length > 0">
+                <thead>
+                    <tr>
+                        <th>Mã BH</th>
+                        <th>Tên</th>
+                        <th>Địa chỉ</th>
+                        <th>Bát</th>
+                        <th>Lấy</th>
+                        <th data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.Paying">Đóng</th>
+                        <th data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.SlowlyReturn">T.Hồi Từ</th>
+                        <th data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.SlowlyReturn">Đóng Cuối</th>
+                        <th data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.UnableToPay">Bễ Từ</th>
+                        <th data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.SlowlyReturn">Mỗi Ngày</th>
+                        <th>Còn</th>
+                        <th data-bind="visible: indexPageModel.t1List().length > 0" class="hidden-print"></th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: { data: indexPageModel.t1List, afterAdd: show }">
+                    <tr>
+                        <td data-bind="text: contractId"></td>
+                        <td role="button" data-toggle="modal" data-target="#customer-detail-modal"
+                            data-bind="click: getCustomerDetail.bind($data, customerId(), customerName(), customerAddress(), locationId(), customerPhoneNumber(), customerNote())">
+                            <a href="#">
+                                <span data-bind="text: customerName"></span>
+                            </a>
+                        </td>
+                        <td data-bind="text: customerAddress"></td>
+                        <td data-bind="text: contractInformation"></td>
+                        <td data-bind="text: moment(borrowDate(), 'YYYY/MM/DD').format('DD/MM/YYYY')"></td>
+                        <td data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.SlowlyReturn">
+                            <span data-bind="text: moment(slowlyReturnStartDate(), 'YYYY/MM/DD').format('DD/MM/YYYY')"></span>
+                        </td>
+                        <td data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.SlowlyReturn">
+                            <span data-bind="text: lastReturnDate() == null ? '' : moment(lastReturnDate(), 'YYYY/MM/DD').format('DD/MM/YYYY')"></span>
+                        </td>
+                        <td data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.UnableToPay">
+                            <span data-bind="text: moment(unableToPayStartDate(), 'YYYY/MM/DD').format('DD/MM/YYYY')"></span>
+                        </td>
+                        <td data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.Paying">
+                            <span data-bind="visible: totalPaidDays() < 10">&nbsp;&nbsp;</span><span data-bind="text: formattedTotalPaidDays"></span>
+                        </td>
+                        <td data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.Paying">
+                            <span data-bind="visible: totalUnpaidDays() < 10">&nbsp;&nbsp;</span>
+                            <span data-bind="text: formattedTotalUnpaidDays"></span> = <span data-bind="text: totalLeft"></span>k
+                        </td>
+                        <td data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.SlowlyReturn">
+                            <span data-bind="text: slowlyReturnAmountPerDay"></span>k
+                        </td>
+                        <td data-bind="visible: indexPageModel.filterData.contractStatusId() != ContractStatusEnum.Paying">
+                            <span data-bind="text: totalLeft"></span>k
+                        </td>
+                        <td class="text-center hidden-print">
+                            <button class="btn btn-xs btn-success" data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.Paying && indexPageModel.filterData.isDaily">
+                                <span class="glyphicon glyphicon-arrow-up"></span> Đóng Nhanh
+                            </button>
+                            <button class="btn btn-xs btn-warning" data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.SlowlyReturn && indexPageModel.filterData.isDaily">
+                                <span class="glyphicon glyphicon-arrow-down"></span> T.Hồi Nhanh
+                            </button>
+                            <button class="btn btn-xs btn-info" data-toggle="modal" data-target="#contractType1-detail-modal">
+                                <span class="glyphicon glyphicon-arrow-right"></span> Chi Tiết
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-responsive my-index-table">
+            <table class="table table-striped table-condensed table-bordered table-hover"
+                   data-bind="visible: indexPageModel.filterData.contractType() == ContractTypeEnum.Type2 && indexPageModel.t2List().length > 0">
+                <thead>
+                    <tr>
+                        <th>Mã KN</th>
+                        <th>Tên</th>
+                        <th>Địa chỉ</th>
+                        <th>Khoản, (Giá)</th>
+                        <th>Tiền/Ngày</th>
+                        <th>Lấy</th>
+                        <th data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.Paying">Thiếu</th>
+                        <th data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.SlowlyReturn">T.Hồi Từ</th>
+                        <th data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.UnableToPay">Bễ Từ</th>
+                        <th data-bind="visible: indexPageModel.filterData.contractStatusId() != ContractStatusEnum.Paying">Còn</th>
+                        <th data-bind="visible: indexPageModel.t2List().length > 0" class="hidden-print"></th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: { data: indexPageModel.t2List, afterAdd: show }">
+                    <tr>
+                        <td data-bind="text: contractId"></td>
+                        <td role="button" data-toggle="modal" data-target="#customer-detail-modal"
+                            data-bind="click: getCustomerDetail.bind($data, customerId(), customerName(), customerAddress(), locationId(), customerPhoneNumber(), customerNote())">
+                            <a href="#">
+                                <span data-bind="text: customerName"></span>
+                            </a>
+                        </td>
+                        <td data-bind="text: customerAddress"></td>
+                        <td>
+                            <span data-bind="visible: amount() < 10">&nbsp;</span>
+                            <span data-bind="text: amount"></span>tr, (<span data-bind="text: interestRate"></span>)
+                        </td>
+                        <td>
+                            <span data-bind="visible: amountPerPeriod() < 1000">&nbsp;</span>
+                            <span data-bind="text: periodInformation"></span>
+                        </td>
+                        <td data-bind="text: moment(borrowDate(), 'YYYY/MM/DD').format('DD/MM/YYYY')"></td>
+                        <td data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.SlowlyReturn">
+                            <span data-bind="text: moment(slowlyReturnStartDate(), 'YYYY/MM/DD').format('DD/MM/YYYY')"></span>
+                        </td>
+                        <td data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.UnableToPay">
+                            <span data-bind="text: moment(unableToPayStartDate(), 'YYYY/MM/DD').format('DD/MM/YYYY')"></span>
+                        </td>
+                        <td data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.Paying">
+                            <span data-bind="text: unpaidDays"></span> kỳ
+                        </td>
+                        <td data-bind="visible: indexPageModel.filterData.contractStatusId() != ContractStatusEnum.Paying">
+                            <span data-bind="text: totalLeft"></span>k
+                        </td>
+                        <td data-bind="visible: !indexPageModel.filterData.isDaily()" class="text-center hidden-print">
+                            <button class="btn btn-xs btn-success"
+                                    data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.Paying && indexPageModel.filterData.isDaily">
+                                Đóng Nhanh
+                            </button>
+                            <button class="btn btn-xs btn-warning"
+                                    data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.SlowlyReturn && indexPageModel.filterData.isDaily">
+                                T.Hồi Nhanh
+                            </button>
+                            <button class="btn btn-xs btn-info" data-bind=""><span class="glyphicon glyphicon-arrow-right hidden-print"></span> Chi Tiết</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="index-dailypay" class="panel panel-default customa hidden-print">
+    <div class="panel-heading">Cần Thu Hôm Nay - <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> @DateTime.Now.ToString("d")</div>
+    <div class="panel-body info-body">
+        <div class="row" data-bind="foreach: { data: indexPageModel.dailyInfo }">
+            <div class="col-xs-12 col-sm-5">
+                <table class="index-table">
+                    <thead>
+                        <tr><td colspan="3" class="index-heading"><span data-bind="text: location.locationName"></span>:</td></tr>
+                    </thead>
+                    <tbody data-bind="foreach: { data: contractsInfo }">
+                        <tr>
+                            <td class="index-heading" data-bind="text: contractType.contractTypeName"></td>
+                            <td>
+                                <a href="#" data-bind="click: getAllContracts.bind($data, $parent.location.locationId, contractType.contractTypeId, ContractStatusEnum.Paying, true)">
+                                    Đang Thu <span data-bind="text: payingContracts, css: setContractStatus(payingContracts, ContractStatusEnum.Paying)"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" data-bind="click: getAllContracts.bind($data, $parent.location.locationId, contractType.contractTypeId, ContractStatusEnum.SlowlyReturn, true)">
+                                    Thu Hồi <span data-bind="text: slowlyContracts, css: setContractStatus(slowlyContracts, ContractStatusEnum.SlowlyReturn)"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="index-information" class="panel panel-default customa hidden-print">
+    <div class="panel-heading">Tổng Số Bát Họ / Khoản Nóng</div>
+    <div class="panel-body info-body">
+        <div class="row" data-bind="foreach: { data: indexPageModel.totalInfo }">
+            <div class="col-xs-12 col-sm-5">
+                <table class="index-table">
+                    <thead>
+                        <tr><td colspan="3" class="index-heading"><span data-bind="text: location.locationName"></span>:</td></tr>
+                    </thead>
+                    <tbody data-bind="foreach: { data: contractsInfo }">
+                        <tr>
+                            <td class="index-heading" data-bind="text: contractType.contractTypeName"></td>
+                            <td>
+                                <a href="#" data-bind="click: getAllContracts.bind($data, $parent.location.locationId, contractType.contractTypeId, ContractStatusEnum.Paying, false)">
+                                    Đang Thu <span data-bind="text: payingContracts, css: setContractStatus(payingContracts, ContractStatusEnum.Paying)"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" data-bind="click: getAllContracts.bind($data, $parent.location.locationId, contractType.contractTypeId, ContractStatusEnum.SlowlyReturn, false)">
+                                    Thu Hồi <span data-bind="text: slowlyContracts, css: setContractStatus(slowlyContracts, ContractStatusEnum.SlowlyReturn)"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" data-bind="click: getAllContracts.bind($data, $parent.location.locationId, contractType.contractTypeId, ContractStatusEnum.UnableToPay, false)">
+                                    Bễ <span data-bind="text: unableContracts, css: setContractStatus(unableContracts, ContractStatusEnum.UnableToPay)"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-inline" id="index-create-buttons">
+            <div class="form-group">
+                <button type="button" class="btn btn-primary index-buttons" id="btn-add-customer" data-toggle="modal" data-target="#create-customer-modal">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Thêm Khách
+                </button>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-success index-buttons" data-toggle="modal" data-target="#create-contractT1-modal">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Thêm Họ
+                </button>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-warning index-buttons">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Thêm Khoản
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+
+

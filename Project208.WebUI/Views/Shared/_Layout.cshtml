@@ -1,0 +1,72 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title - 208 TĐT</title>
+    <link asp-href-include="/bundler/css/bundle.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-controller="Home" asp-action="Index" class="navbar-brand">208</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">
+                            <span class="glyphicon glyphicon-list-alt"></span> &nbsp;Danh Sách
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="DanhSach" asp-action="Thieu">Thiếu Họ / Khoản</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a asp-controller="DanhSach" asp-action="ListNgay">List Ngày</a></li>
+                            <li><a asp-controller="DanhSach" asp-action="XuatNgay">Xuất Ngày</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a asp-controller="Customer" asp-action="Index">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> &nbsp;Khách Hàng
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> &nbsp;Ghi Chú
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content">
+        @RenderSection("Body")
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - 208 TĐT</p>
+        </footer>
+    </div>
+
+    <script asp-src-include="/bundler/js/bundle.min.js"></script>
+    @RenderSection("Scripts", false)
+    <script>
+        var token = '@GetAntiXsrfRequestToken()';
+    </script>
+</body>
+</html>
