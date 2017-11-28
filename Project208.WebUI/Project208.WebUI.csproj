@@ -2,16 +2,6 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Views\Customers\**" />
-    <Compile Remove="Views\Errors\**" />
-    <Content Remove="Views\Customers\**" />
-    <Content Remove="Views\Errors\**" />
-    <EmbeddedResource Remove="Views\Customers\**" />
-    <EmbeddedResource Remove="Views\Errors\**" />
-    <None Remove="Views\Customers\**" />
-    <None Remove="Views\Errors\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
@@ -30,8 +20,4 @@
   <ItemGroup>
     <ProjectReference Include="..\Project208.Services\Project208.Services.csproj" />
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if not exist “$(WebProjectOutputDir)\bin\Roslyn” md “$(WebProjectOutputDir)\bin\Roslyn”&#xD;&#xA;start /MIN xcopy /s /y /R “$(OutDir)roslyn\*.*” “$(WebProjectOutputDir)\bin\Roslyn”" />
-  </Target>
 </Project>
