@@ -11,7 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Project208.WebUI\Project208.WebUI.csproj" />
-    <ProjectReference Include="..\Project208.Services\Project208.Services.csproj" />
+    <ProjectReference Include="..\Project208.Services\Project208.Services.csproj">
+      <Private>true</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project208.WebUI\Project208.WebUI.csproj">
+      <Private>true</Private>
+    </ProjectReference>
   </ItemGroup>
 </Project>

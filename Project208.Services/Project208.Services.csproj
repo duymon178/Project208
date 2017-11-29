@@ -11,6 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Project208.Domain\Project208.Domain.csproj" />
+    <ProjectReference Include="..\Project208.Domain\Project208.Domain.csproj">
+      <Private>true</Private>
+    </ProjectReference>
   </ItemGroup>
 </Project>
