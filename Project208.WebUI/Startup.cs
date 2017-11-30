@@ -39,12 +39,16 @@ namespace Project208.WebUI
             services.AddTransient<IT1ContractService, T1ContractService>();
             services.AddTransient<IT2ContractService, T2ContractService>();
 
-            
+
             services.AddMvc()
                 .AddJsonOptions(
                     options => { options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; }
                 )
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+                .AddFluentValidation(fv => {
+                    fv.RegisterValidatorsFromAssemblyContaining<Startup>();
+                    fv.ConfigureClientsideValidation(enabled: false);
+                });
+            
 
             services.AddAutoMapper();
         }
@@ -59,7 +63,8 @@ namespace Project208.WebUI
             }
             else
             {
-                app.UseExceptionHandler("/Error/500");
+                app.UseDeveloperExceptionPage();
+                //app.UseExceptionHandler("/Error/500");
             }
             
             app.UseStaticFiles();
