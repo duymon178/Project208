@@ -63,8 +63,7 @@ namespace Project208.WebUI
             }
             else
             {
-                app.UseDeveloperExceptionPage();
-                //app.UseExceptionHandler("/Error/500");
+                app.UseExceptionHandler("/Error/500");
             }
             
             app.UseStaticFiles();
