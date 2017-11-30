@@ -1,5 +1,6 @@
 # Project208
 A simple loan-shark management ASP.NET Core Mvc web application.
+This is a ongoing project.
 
 Demo: http://project208.azurewebsites.net/
 
