@@ -146,7 +146,7 @@
                             <span data-bind="visible: totalPaidDays() < 10">&nbsp;&nbsp;</span><span data-bind="text: formattedTotalPaidDays"></span>
                         </td>
                         <td data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.Paying">
-                            <span data-bind="visible: totalUnpaidDays() < 10">&nbsp;&nbsp;</span>
+                            <span data-bind="visible: totalUnpaidDays() < 10">&nbsp;</span>
                             <span data-bind="text: formattedTotalUnpaidDays"></span> = <span data-bind="text: totalLeft"></span>k
                         </td>
                         <td data-bind="visible: indexPageModel.filterData.contractStatusId() == ContractStatusEnum.SlowlyReturn">
