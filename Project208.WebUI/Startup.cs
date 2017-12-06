@@ -9,6 +9,7 @@ using Project208.Services.Abstract;
 using Project208.Services.Concrete;
 using FluentValidation.AspNetCore;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 
 namespace Project208.WebUI
 {
@@ -39,6 +40,7 @@ namespace Project208.WebUI
             services.AddTransient<IT1ContractService, T1ContractService>();
             services.AddTransient<IT2ContractService, T2ContractService>();
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddMvc()
                 .AddJsonOptions(
@@ -46,7 +48,6 @@ namespace Project208.WebUI
                 )
                 .AddFluentValidation(fv => {
                     fv.RegisterValidatorsFromAssemblyContaining<Startup>();
-                    fv.ConfigureClientsideValidation(enabled: false);
                 });
             
 
